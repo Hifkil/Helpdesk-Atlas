@@ -1,0 +1,55 @@
+PREUVE — Premier backup PBS complet des 4 VM de production
+Date : 2026-07-12 08:34:15–08:35:57 UTC · Opérateur : Harry
+Destination : pbs01 (hv02), datastore atlas-backups (disque dédié 100 Go)
+Compte : pve-backup@pbs (rôle DatastoreBackup, moindre privilège), fingerprint pinné.
+
+=== glpi01 (VMID 220) — lancé manuellement avec chrono ===
+root@hv01:~# date && vzdump 220 --storage pbs01 --mode snapshot --notes-template '{{guestname}} premier backup'
+Sun Jul 12 08:34:15 UTC 2026
+INFO: Starting Backup of VM 220 (qemu)          [08:34:16]
+INFO: VM Name: glpi01 · include disk scsi0 15G · mode snapshot
+INFO: creating Proxmox Backup Server archive 'vm/220/2026-07-12T08:34:16Z'
+INFO: issuing guest-agent 'fs-freeze' command
+INFO: issuing guest-agent 'fs-thaw' command
+INFO: scsi0: dirty-bitmap status: created new
+INFO: backup is sparse: 12.37 GiB (82%) total zero data
+INFO: transferred 15.00 GiB in 20 seconds (768.0 MiB/s)
+INFO: Finished Backup of VM 220 (00:00:20)      [08:34:36]
+
+=== fw01 (VMID 100) ===
+INFO: Backup started at 2026-07-12 08:34:48
+INFO: VM Name: fw01 · include disk ide0 20G
+INFO: skipping guest filesystem freeze - disabled in VM options
+   ← pas d'agent qemu sur FreeBSD/OPNsense : accepté et documenté
+     (config OPNsense = XML statique, cohérence via snapshot)
+INFO: ide0: dirty-bitmap status: created new
+INFO: backup is sparse: 13.48 GiB (67%) total zero data
+INFO: transferred 20.00 GiB in 38 seconds (538.9 MiB/s)
+INFO: Finished Backup of VM 100 (00:00:38)      [08:35:26]
+
+=== dns01 (VMID 110) ===
+INFO: Backup started at 2026-07-12 08:35:26
+INFO: issuing guest-agent 'fs-freeze' / 'fs-thaw'   ← OK
+INFO: backup is sparse: 13.26 GiB (88%) total zero data
+INFO: transferred 15.00 GiB in 14 seconds (1.1 GiB/s)
+INFO: Finished Backup of VM 110 (00:00:14)      [08:35:40]
+
+=== db01 (VMID 310) ===
+INFO: Backup started at 2026-07-12 08:35:40
+INFO: issuing guest-agent 'fs-freeze' / 'fs-thaw'   ← OK
+INFO: backup is sparse: 12.86 GiB (85%) total zero data
+INFO: transferred 15.00 GiB in 16 seconds (960.0 MiB/s)
+INFO: Finished Backup of VM 310 (00:00:17)      [08:35:57]
+INFO: Backup job finished successfully
+
+(Sorties intégrales conservées dans l'historique de session ; progression
+détaillée % par % tronquée ici pour lisibilité.)
+
+BILAN : 4/4 VM sauvegardées en 101 s (08:34:16 → 08:35:57), ~13 GiB de
+données utiles sur 65 GiB provisionnés (sparse/dédup). Dirty-bitmaps créées
+→ passages suivants incrémentaux (mesuré ensuite : 4 VM en 4 s au Run now
+du job quotidien, 08:43:47–08:43:53 UTC).
+VERIFY (08:38:57–08:39:15 UTC) : 4/4 groupes, 0 erreur, TASK OK
+→ log intégral : task-pbs01-verificationjob-2026-07-12T08_38_57Z.log
+Nota : warning « could not notify via mail-to-root » en fin de job = attendu,
+aucun relais SMTP encore déployé (résolu par mail01).

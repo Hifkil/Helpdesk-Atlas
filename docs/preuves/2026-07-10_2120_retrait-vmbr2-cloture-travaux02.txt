@@ -1,0 +1,61 @@
+PREUVE — Retrait du WAN provisoire vmbr2 sur hv01 (TRAVAUX-02, phase 6)
+Date : 2026-07-10 ~21:18–21:25 UTC · Opérateur : Harry
+Préalable : backup /root/interfaces.bak-wan-2026-07-10 créé.
+
+--- 1. Détection : deux VM d'essai référençaient encore vmbr2 ---
+root@hv01:~# grep -l vmbr2 /etc/pve/qemu-server/*.conf ; echo "rc=$?"
+/etc/pve/qemu-server/1001.conf
+/etc/pve/qemu-server/90909.conf
+rc=0
+
+root@hv01:~# qm list | grep -E '1001|90909'
+      1001 test03               stopped    2048              15.00 0
+     90909 test                 stopped    2048              15.00 0
+
+--- 2. Destruction (ordre imposé par ZFS : le clone lié d'abord) ---
+root@hv01:~# qm destroy 1001 --purge
+base volume 'zfs-data:base-1001-disk-0' is still in use by linked cloned
+   ← 1001 était un template, 90909 son LINKED CLONE : ZFS refuse.
+     Illustration en conditions réelles de la règle projet « full clone toujours ».
+root@hv01:~# qm destroy 90909 --purge      [OK]
+root@hv01:~# qm destroy 1001 --purge       [OK]
+
+--- 3. Suppression du bloc vmbr2 (lignes 49-57 de /etc/network/interfaces) ---
+Bloc retiré :
+    auto vmbr2
+    iface vmbr2 inet static
+        address 192.168.100.1/24
+        bridge-ports none / bridge-stp off / bridge-fd 0
+        post-up   echo 1 > /proc/sys/net/ipv4/ip_forward
+        post-up   iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o vmbr0 -j MASQUERADE
+        post-down iptables -t nat -D POSTROUTING -s 192.168.100.0/24 -o vmbr0 -j MASQUERADE
+Puis : ifreload -a
+
+--- 4. La règle MASQUERADE survivait en mémoire (post-down jamais exécuté
+       lors d'une suppression de bloc + ifreload) → retrait manuel ---
+root@hv01:~# iptables -t nat -S POSTROUTING
+-P POSTROUTING ACCEPT
+-A POSTROUTING -s 192.168.100.0/24 -o vmbr0 -j MASQUERADE
+root@hv01:~# iptables -t nat -D POSTROUTING -s 192.168.100.0/24 -o vmbr0 -j MASQUERADE
+root@hv01:~# iptables -t nat -L POSTROUTING -n
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination
+   ← chaîne vide ✅
+
+--- 5. Vérifications finales ---
+root@hv01:~# ip a show vmbr2
+Device "vmbr2" does not exist.
+root@hv01:~# grep -r ip_forward /etc/sysctl.conf /etc/sysctl.d/ 2>/dev/null
+   ← vide : rien ne fixe le forwarding au boot
+root@hv01:~# sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 1        ← valeur mémoire résiduelle
+root@hv01:~# sysctl -w net.ipv4.ip_forward=0
+
+--- 6. Contre-recette (dns01) : la sortie Internet passe toujours (via fw01) ---
+root@dns01:~# ping -c3 9.9.9.9
+3 packets transmitted, 3 received, 0% packet loss
+root@dns01:~# curl -4 -s https://ifconfig.me/ip
+51.75.38.225
+
+CONCLUSION : vmbr2/MASQUERADE/forwarding entièrement retirés de hv01.
+L'hyperviseur ne route plus rien : fw01 est l'unique chemin. TRAVAUX-02 CLOS. ✅

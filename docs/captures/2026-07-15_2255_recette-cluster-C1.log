@@ -1,0 +1,64 @@
+2026-07-15 22:55:34 === Recette cluster atlas — hv01 ===
+2026-07-15 22:55:35 pveversion: pve-manager/9.2.3/d0fde103346cf89a (running kernel: 7.0.12-1-pve)
+Cluster information
+-------------------
+Name:             atlas
+Config Version:   3
+Transport:        knet
+Secure auth:      on
+
+Quorum information
+------------------
+Date:             Wed Jul 15 22:55:35 2026
+Quorum provider:  corosync_votequorum
+Nodes:            2
+Node ID:          0x00000001
+Ring ID:          1.23
+Quorate:          Yes
+
+Votequorum information
+----------------------
+Expected votes:   3
+Highest expected: 3
+Total votes:      3
+Quorum:           2  
+Flags:            Quorate Qdevice 
+
+Membership information
+----------------------
+    Nodeid      Votes    Qdevice Name
+0x00000001          1    A,V,NMW 10.90.0.11 (local)
+0x00000002          1    A,V,NMW 10.90.0.12
+0x00000000          1            Qdevice
+2026-07-15 22:55:35 PASS  Quorate: Yes
+2026-07-15 22:55:35 PASS  3 votes / 3 (2 noeuds + QDevice)
+2026-07-15 22:55:35 PASS  QDevice listé dans le membership
+2026-07-15 22:55:35 INFO  vérifier flags QDevice manuellement (A,V attendus)
+Local node ID 1, transport knet
+LINK ID 0 udp
+	addr	= 10.90.0.11
+	status:
+		nodeid:          1:	localhost
+		nodeid:          2:	connected
+2026-07-15 22:55:35 PASS  link0 corosync connected
+10 packets transmitted, 10 received, 0% packet loss, time 9221ms
+rtt min/avg/max/mdev = 0.414/0.634/0.746/0.092 ms
+2026-07-15 22:55:44 PASS  0% perte vers 10.90.0.12
+2026-07-15 22:55:44 PASS  latence moyenne 0.634 ms (< 1 ms)
+2026-07-15 22:55:44 PASS  SSH croisé -> hv02
+Name            Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+local            dir     active       254859008         2947712       251911296    1.16%
+pbs01            pbs     active       102625188        10922840        86443140   10.64%
+zfs-data     zfspool     active       459276288       207364916       251911372   45.15%
+2026-07-15 22:55:45 PASS  zfs-data actif
+2026-07-15 22:55:45 PASS  storage pbs01 actif
+JobID      Enabled    Target                           LastSync             NextSync   Duration  FailCount State
+100-0      Yes        local/hv02            2026-07-15_22:49:03  2026-07-15_23:00:00   2.158011          0 OK
+110-0      Yes        local/hv02            2026-07-15_22:53:34  2026-07-15_23:00:00   2.221116          0 OK
+210-0      Yes        local/hv02            2026-07-15_22:46:09  2026-07-15_23:00:00  28.101015          0 OK
+220-0      Yes        local/hv02            2026-07-15_22:46:37  2026-07-15_23:00:00  48.023631          0 OK
+230-0      Yes        local/hv02            2026-07-15_22:47:25  2026-07-15_23:00:00  37.507415          0 OK
+310-0      Yes        local/hv02            2026-07-15_22:48:03  2026-07-15_23:00:00  46.904886          0 OK
+2026-07-15 22:55:45 PASS  pvesr : 6 jobs, 0 en erreur
+2026-07-15 22:55:45 === Bilan : 10 PASS / 0 FAIL ===
+2026-07-15 22:55:45 RECETTE C1 : OK — archiver ce log dans docs/preuves/

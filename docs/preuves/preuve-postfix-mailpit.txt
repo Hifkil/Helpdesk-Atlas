@@ -1,0 +1,181 @@
+Jul 14 17:06:17 mail01 systemd[1]: Stopping postfix.service - Postfix Mail Transport Agent (main/default instance)...
+Jul 14 17:06:17 mail01 postfix[2919]: postfix/postlog: stopping the Postfix mail system
+Jul 14 17:06:17 mail01 postfix/postfix-script[2919]: stopping the Postfix mail system
+Jul 14 17:06:17 mail01 postfix/master[2752]: terminating on signal 15
+Jul 14 17:06:17 mail01 systemd[1]: postfix.service: Deactivated successfully.
+Jul 14 17:06:17 mail01 systemd[1]: Stopped postfix.service - Postfix Mail Transport Agent (main/default instance).
+Jul 14 17:06:17 mail01 systemd[1]: Starting postfix.service - Postfix Mail Transport Agent (main/default instance)...
+Jul 14 17:06:17 mail01 postfix/master[3036]: daemon started -- version 3.10.12, configuration /etc/postfix
+Jul 14 17:06:17 mail01 systemd[1]: Started postfix.service - Postfix Mail Transport Agent (main/default instance).
+Jul 14 17:06:30 mail01 postfix/smtpd[3045]: connect from localhost[127.0.0.1]
+Jul 14 17:06:30 mail01 postfix/smtpd[3045]: B0E8360278: client=localhost[127.0.0.1]
+Jul 14 17:06:30 mail01 postfix/cleanup[3049]: B0E8360278: message-id=<20260714170630.003044@mail01.atlas.local>
+Jul 14 17:06:30 mail01 postfix/smtpd[3045]: disconnect from localhost[127.0.0.1] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+Jul 14 17:06:30 mail01 postfix/qmgr[3038]: B0E8360278: from=<glpi@atlas.local>, size=488, nrcpt=1 (queue active)
+Jul 14 17:06:30 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:06:30 mail01 postfix/smtp[3050]: B0E8360278: to=<alice.martin@atlas.local>, relay=none, delay=0.03, delays=0.01/0.02/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:06:43 mail01 postfix/qmgr[3038]: B0E8360278: from=<glpi@atlas.local>, size=488, nrcpt=1 (queue active)
+Jul 14 17:06:43 mail01 postfix/smtp[3050]: B0E8360278: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, delay=13, delays=13/0/0/0.01, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 3dDELlVoul4mFEE3uZMUYY)
+Jul 14 17:06:43 mail01 postfix/qmgr[3038]: B0E8360278: removed
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: connect from glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: C6B7C60278: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: C6B7C60278: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/new@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: C6B7C60278: from=<glpi@atlas.local>, size=4829, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: C6B7C60278: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: CEEB1602F4: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: CEEB1602F4: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/new@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: CEEB1602F4: from=<glpi@atlas.local>, size=4835, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: CEEB1602F4: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: D41CD6031F: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: D41CD6031F: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/assign_user.1784044666.409845851@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: D41CD6031F: from=<glpi@atlas.local>, size=5448, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: D41CD6031F: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: DA43860334: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: DA43860334: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/assign_user.1784044666.195963554@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: DA43860334: from=<glpi@atlas.local>, size=5454, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: DA43860334: to=<technicien@atlas.local>, relay=none, delay=0.05, delays=0.05/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: E9C356033C: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: E9C356033C: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/add_followup.1784044870.1324531942@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: E9C356033C: from=<glpi@atlas.local>, size=7568, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: E9C356033C: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:25 mail01 postfix/smtpd[3045]: EF3D160350: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:25 mail01 postfix/cleanup[3049]: EF3D160350: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/add_followup.1784044870.723440816@glpi01>
+Jul 14 17:07:25 mail01 postfix/qmgr[3038]: EF3D160350: from=<glpi@atlas.local>, size=7573, nrcpt=1 (queue active)
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:25 mail01 postfix/smtp[3050]: EF3D160350: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 006F860355: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 006F860355: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/solved.1784044903.1209917172@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 006F860355: from=<glpi@atlas.local>, size=10311, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 006F860355: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 0733060373: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 0733060373: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-1/solved.1784044903.1637037387@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 0733060373: from=<glpi@atlas.local>, size=10317, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 0733060373: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 0BE5D6037A: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 0BE5D6037A: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/new@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 0BE5D6037A: from=<glpi@atlas.local>, size=4476, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 0BE5D6037A: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 10CD760383: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 10CD760383: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/new@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 10CD760383: from=<glpi@atlas.local>, size=4482, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 10CD760383: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 1685B60393: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 1685B60393: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/add_followup.1784045016.842149398@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 1685B60393: from=<glpi@atlas.local>, size=6690, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 1685B60393: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 1C25B603A0: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 1C25B603A0: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/add_followup.1784045016.1687618835@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 1C25B603A0: from=<glpi@atlas.local>, size=6697, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 1C25B603A0: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 1FE7B603A7: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 1FE7B603A7: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/assign_user.1784045020.955409326@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 1FE7B603A7: from=<glpi@atlas.local>, size=6933, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 1FE7B603A7: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 250CC603AF: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 250CC603AF: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/assign_user.1784045020.947694439@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 250CC603AF: from=<glpi@atlas.local>, size=6939, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 250CC603AF: to=<technicien@atlas.local>, relay=none, delay=0, delays=0/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 2936E603B7: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 2936E603B7: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/solved.1784045026.172702955@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 2936E603B7: from=<glpi@atlas.local>, size=9513, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 2936E603B7: to=<admin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: 2EC21603B9: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:26 mail01 postfix/cleanup[3049]: 2EC21603B9: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-2/solved.1784045026.707222933@glpi01>
+Jul 14 17:07:26 mail01 postfix/qmgr[3038]: 2EC21603B9: from=<glpi@atlas.local>, size=9519, nrcpt=1 (queue active)
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:26 mail01 postfix/smtp[3050]: 2EC21603B9: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:07:26 mail01 postfix/smtpd[3045]: disconnect from glpi01.atlas.local[10.20.0.11] ehlo=2 starttls=1 mail=16 rcpt=16 data=16 quit=1 commands=52
+Jul 14 17:07:57 mail01 postfix/smtpd[3045]: connect from glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:57 mail01 postfix/smtpd[3045]: 7D41C603C0: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:07:57 mail01 postfix/cleanup[3049]: 7D41C603C0: message-id=<33b745774548e98c1ec891be91dcade4@atlas.local>
+Jul 14 17:07:57 mail01 postfix/qmgr[3038]: 7D41C603C0: from=<glpi@atlas.local>, size=641, nrcpt=1 (queue active)
+Jul 14 17:07:57 mail01 postfix/smtpd[3045]: disconnect from glpi01.atlas.local[10.20.0.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Jul 14 17:07:57 mail01 postfix/smtp[3050]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:07:57 mail01 postfix/smtp[3050]: 7D41C603C0: to=<admin@atlas.local>, relay=none, delay=0.05, delays=0.05/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:09:55 mail01 postfix/smtpd[3077]: connect from glpi01.atlas.local[10.20.0.11]
+Jul 14 17:09:55 mail01 postfix/smtpd[3077]: ED4CC603CB: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:09:55 mail01 postfix/cleanup[3080]: ED4CC603CB: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-3/new@glpi01>
+Jul 14 17:09:55 mail01 postfix/qmgr[3038]: ED4CC603CB: from=<glpi@atlas.local>, size=4464, nrcpt=1 (queue active)
+Jul 14 17:09:55 mail01 postfix/smtp[3081]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:09:55 mail01 postfix/smtpd[3077]: F4105603CC: client=glpi01.atlas.local[10.20.0.11]
+Jul 14 17:09:56 mail01 postfix/cleanup[3080]: F4105603CC: message-id=<GLPI_PlpiCRWHDBXcZXIvjC6cOr99V8KJFfWwOUcTqOQ2-Ticket-3/new@glpi01>
+Jul 14 17:09:56 mail01 postfix/smtp[3081]: ED4CC603CB: to=<admin@atlas.local>, relay=none, delay=0.03, delays=0.01/0.02/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:09:56 mail01 postfix/qmgr[3038]: F4105603CC: from=<glpi@atlas.local>, size=4470, nrcpt=1 (queue active)
+Jul 14 17:09:56 mail01 postfix/smtp[3081]: connect to 127.0.0.1[127.0.0.1]:1025: Connection refused
+Jul 14 17:09:56 mail01 postfix/smtp[3081]: F4105603CC: to=<alice.martin@atlas.local>, relay=none, delay=0.01, delays=0.01/0/0/0, dsn=4.4.1, status=deferred (connect to 127.0.0.1[127.0.0.1]:1025: Connection refused)
+Jul 14 17:09:56 mail01 postfix/smtpd[3077]: disconnect from glpi01.atlas.local[10.20.0.11] ehlo=2 starttls=1 mail=2 rcpt=2 data=2 quit=1 commands=10
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: F4105603CC: from=<glpi@atlas.local>, size=4470, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: EF3D160350: from=<glpi@atlas.local>, size=7573, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: E9C356033C: from=<glpi@atlas.local>, size=7568, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: ED4CC603CB: from=<glpi@atlas.local>, size=4464, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: CEEB1602F4: from=<glpi@atlas.local>, size=4835, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: C6B7C60278: from=<glpi@atlas.local>, size=4829, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 0733060373: from=<glpi@atlas.local>, size=10317, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 006F860355: from=<glpi@atlas.local>, size=10311, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 0BE5D6037A: from=<glpi@atlas.local>, size=4476, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: DA43860334: from=<glpi@atlas.local>, size=5454, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: D41CD6031F: from=<glpi@atlas.local>, size=5448, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 7D41C603C0: from=<glpi@atlas.local>, size=641, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 250CC603AF: from=<glpi@atlas.local>, size=6939, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 2EC21603B9: from=<glpi@atlas.local>, size=9519, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 2936E603B7: from=<glpi@atlas.local>, size=9513, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 10CD760383: from=<glpi@atlas.local>, size=4482, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1685B60393: from=<glpi@atlas.local>, size=6690, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1FE7B603A7: from=<glpi@atlas.local>, size=6933, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1C25B603A0: from=<glpi@atlas.local>, size=6697, nrcpt=1 (queue active)
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: F4105603CC: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, delay=64, delays=64/0/0/0.01, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 0YaIGsJtYtDtpKyUUXAwne)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: F4105603CC: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: EF3D160350: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, delay=214, delays=214/0.01/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2R9QKf0gaFQL82DVLqDVbs)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: EF3D160350: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: E9C356033C: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=2, delay=214, delays=214/0.01/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2OVdAH6kLeJQYp9ngvVSxq)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: E9C356033C: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: ED4CC603CB: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=3, delay=64, delays=64/0.02/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4Uo2uvBoYYpg9PXniMK8JO)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: ED4CC603CB: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: C6B7C60278: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, delay=214, delays=214/0.02/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 0cZO0f9bZkGYKjWT3l38NE)
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: CEEB1602F4: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=4, delay=214, delays=214/0.02/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 6ReFMMwCewLL6fnsJNxI1n)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: C6B7C60278: removed
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: CEEB1602F4: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 0733060373: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=2, delay=214, delays=214/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 5gx9x9Ydkklyseo4dmoNlW)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 0733060373: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 0BE5D6037A: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=3, delay=214, delays=214/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2siPJnmmphNMfTlGQ1CXkf)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 0BE5D6037A: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: 006F860355: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=5, delay=214, delays=214/0.03/0/0.01, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 5jZWEuQjsBGVWufFDv25k8)
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: DA43860334: to=<technicien@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=4, delay=214, delays=214/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 07eG5Y3X7a9AX3tNdPjiaH)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 006F860355: removed
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: DA43860334: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: 7D41C603C0: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=6, delay=182, delays=182/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 238vlgjUegEaUck5nrEdju)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 7D41C603C0: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: D41CD6031F: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=5, delay=214, delays=214/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 6rx0O2ss7buFLGB7zOup5X)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: D41CD6031F: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 2EC21603B9: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=6, delay=214, delays=214/0.03/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4acJx58qu3fEXjyRZbb5Kn)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 2EC21603B9: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 2936E603B7: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=7, delay=214, delays=214/0.04/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 0PGi6tEqDFrUCdJBYGXs8U)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 2936E603B7: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: 250CC603AF: to=<technicien@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=7, delay=214, delays=214/0.03/0/0.01, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 1rcg8B55wncUHja2YKClU4)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 250CC603AF: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 10CD760383: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=8, delay=214, delays=214/0.04/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 7IdRIuvIk2hHNt8VENAcq6)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 10CD760383: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3081]: 1685B60393: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=8, delay=214, delays=214/0.04/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4fvS7ZglsZoEXosaw8xdZC)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1685B60393: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3107]: 1FE7B603A7: to=<admin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, conn_use=9, delay=214, delays=214/0.04/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 6OLDJb0SWyTLv9A8qpWKEy)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1FE7B603A7: removed
+Jul 14 17:10:59 mail01 postfix/smtp[3109]: 1C25B603A0: to=<alice.martin@atlas.local>, relay=127.0.0.1[127.0.0.1]:1025, delay=214, delays=214/0.04/0/0, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 64lfPHeTzSIkpvAFeHOd4P)
+Jul 14 17:10:59 mail01 postfix/qmgr[3038]: 1C25B603A0: removed
+Jul 14 17:14:19 mail01 postfix/scache[3083]: statistics: start interval Jul 14 17:09:56
+Jul 14 17:14:19 mail01 postfix/scache[3083]: statistics: domain lookup hits=0 miss=19 success=0%
+Jul 14 17:14:19 mail01 postfix/scache[3083]: statistics: address lookup hits=15 miss=4 success=78%
+Jul 14 17:14:19 mail01 postfix/scache[3083]: statistics: max simultaneous domains=1 addresses=1 connection=3

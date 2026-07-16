@@ -1,0 +1,49 @@
+PREUVE — TEST R2 : restauration complète glpi01 → VM 999 (première mesure RTO)
+Date : 2026-07-12 08:45:07–08:53:28 UTC · Opérateur : Harry
+Source : snapshot vm/220/2026-07-12T08:34:16Z (verify OK) sur pbs01.
+Principe : restauration vers une VM temporaire, prod intacte, IP décalée (.99)
+pour coexistence — d'où l'isolation initiale link_down=1 (anti-conflit IP/ARP).
+
+--- Timeline (Task History hv01 + horodatages console) ---
+08:45:07  qmrestore pbs01:backup/vm/220/2026-07-12T08:34:16Z 999
+          --storage zfs-data --unique 1
+08:45:25  Restauration terminée — Task « VM 999 - Restore » : OK
+          → RESTORE : 18 SECONDES (~2,6 GiB utiles / 15 GiB)
+08:45:51  qm start 999 (net0 avec link_down=1)
+~08:47    Validation console (VM isolée) :
+          systemctl is-active nginx php8.4-fpm glpi-cron.timer → active ×3
+          curl -sI http://127.0.0.1 → HTTP/1.1 500 (attendu : DB inaccessible,
+          isolation voulue — la pile web restaurée est fonctionnelle)
+          Reconfiguration IP : sed 10.20.0.11 → 10.20.0.99 dans interfaces.d
+08:53:xx  Raccordement : qm set 999 --net0 ... (sans link_down) ; ifup ens18
+          (leçon : le qm set net0 à chaud provoque un unplug/replug → ifup requis)
+          ping 10.20.0.1 → 0% perte · ping 10.30.0.10 (db01) → 0% perte
+08:53:28  curl -sI http://127.0.0.1 :
+          HTTP/1.1 500 Internal Server Error
+          Server: nginx
+          Set-Cookie: glpi_...= ; path=/; HttpOnly
+          X-Frame-Options: SAMEORIGIN
+          Cache-Control: no-store, no-cache, must-revalidate
+          Date: Sun, 12 Jul 2026 08:53:28 GMT
+          ← L'application GLPI répond (cookie de session, headers applicatifs)
+            et ATTEINT db01 ; le refus vient de l'ACL MariaDB :
+            glpi_app n'est autorisé que depuis 10.20.0.11, pas .99.
+            = PREUVE DU MOINDRE PRIVILÈGE en conditions réelles.
+
+--- Mesures ---
+Restore seul ................ 18 s
+Services actifs ............. ~2 min après T0
+Bout-en-bout (T0 → appli↔DB) 8 min 21 s
+  dont majoritairement des manipulations propres au TEST
+  (isolation volontaire, changement d'IP, debug ifup)
+RTO réel estimé en incident . 2-3 min (restauration à IP identique,
+  la VM restaurée remplace la défunte → aucun blocage ACL)
+Exigence sujet .............. RTO ≤ 40 min → MARGE ×5 à ×15
+
+--- Nettoyage ---
+qm stop 999 ; qm set 999 --protection 0 ; qm destroy 999 --purge
+(le flag protection avait été hérité du template par le clone — leçon notée)
+
+Note runbook R2 : la restauration de production se fait à IP identique ;
+le test à IP décalée valide la chaîne complète en heurtant volontairement
+l'ACL DB, ce qui constitue une preuve supplémentaire du moindre privilège.

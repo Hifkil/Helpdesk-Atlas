@@ -1,0 +1,28 @@
+PREUVE — Écart DHCP corrigé : contre-test « No DHCPOFFERS » (VLAN 90)
+Date : 2026-07-12 ~09:00 UTC · Opérateur : Harry
+
+CONTEXTE (détection) : lors de la fabrication du template v4, la VM a reçu
+un bail DHCP inattendu (10.90.0.208/24, marqué « dynamic » dans ip a) alors
+que la cible d'architecture est « tout statique ». Origine identifiée :
+service Dnsmasq d'OPNsense, plage 10.90.0.41–245 sur l'interface LAN (vlan90
+MGMT), héritée de la configuration LAN initiale. Le DNS de dnsmasq écoutait
+sur le port 53053 (non utilisé — dns01/BIND9 est le seul DNS interne).
+
+CORRECTION : Services → Dnsmasq DNS & DHCP → Enable décoché → Apply
+(service entièrement désactivé, il ne portait que ce DHCP).
+
+--- CONTRE-TEST depuis la VM (dhclient absent sur Debian 13 → busybox) ---
+root@debian:~# busybox udhcpc -i ens18 -n -q
+udhcpc: started, v1.37.0
+udhcpc: broadcasting discover
+udhcpc: broadcasting discover
+udhcpc: broadcasting discover
+udhcpc: no lease, failing
+   ← ✅ trois DISCOVER diffusés, AUCUNE offre : plus aucun serveur DHCP
+     ne répond sur le VLAN 90.
+
+CONCLUSION : écart détecté → corrigé → contre-recette. Le réseau MGMT est
+redevenu 100 % statique, conforme à la cible. La résolution DNS interne
+n'a jamais été impactée (dns01 seul, port 53).
+Leçon documentée : sur OPNsense récent, le DHCP par défaut est servi par
+Dnsmasq (pas Kea) — vérifier ce module lors de tout audit « pas de DHCP ».

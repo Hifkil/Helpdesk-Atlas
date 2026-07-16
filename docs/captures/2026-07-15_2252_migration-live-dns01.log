@@ -1,0 +1,71 @@
+===== /var/log/pve/tasks/7/UPID:hv01:00346E71:05E6DC4B:6A580F37:qmigrate:110:root@pam:
+2026-07-15 22:52:39 conntrack state migration not supported or disabled, active connections might get dropped
+2026-07-15 22:52:39 starting migration of VM 110 to node 'hv02' (10.90.0.12)
+2026-07-15 22:52:39 found local, replicated disk 'zfs-data:vm-110-disk-0' (attached)
+2026-07-15 22:52:39 can't migrate local disk 'zfs-data:vm-110-disk-0': can't live migrate attached local disks without with-local-disks option
+2026-07-15 22:52:39 ERROR: Problem found while scanning volumes - can't migrate VM - check log
+2026-07-15 22:52:39 aborting phase 1 - cleanup resources
+2026-07-15 22:52:39 ERROR: migration aborted (duration 00:00:00): Problem found while scanning volumes - can't migrate VM - check log
+
+TASK ERROR: migration aborted
+===== /var/log/pve/tasks/7/UPID:hv01:00346EF4:05E6E2AF:6A580F47:qmigrate:110:root@pam:
+2026-07-15 22:52:55 conntrack state migration not supported or disabled, active connections might get dropped
+2026-07-15 22:52:55 starting migration of VM 110 to node 'hv02' (10.90.0.12)
+2026-07-15 22:52:55 found local, replicated disk 'zfs-data:vm-110-disk-0' (attached)
+2026-07-15 22:52:55 scsi0: start tracking writes using block-dirty-bitmap 'repl_scsi0'
+2026-07-15 22:52:55 replicating disk images
+2026-07-15 22:52:55 start replication job
+2026-07-15 22:52:56 guest => VM 110, running => 618742
+2026-07-15 22:52:56 volumes => zfs-data:vm-110-disk-0
+2026-07-15 22:52:56 freeze guest filesystem
+2026-07-15 22:52:56 create snapshot '__replicate_110-0_1784155975__' on zfs-data:vm-110-disk-0
+2026-07-15 22:52:56 thaw guest filesystem
+2026-07-15 22:52:57 using secure transmission, rate limit: none
+2026-07-15 22:52:57 incremental sync 'zfs-data:vm-110-disk-0' (__replicate_110-0_1784155538__ => __replicate_110-0_1784155975__)
+2026-07-15 22:52:57 successfully imported 'zfs-data:vm-110-disk-0'
+2026-07-15 22:52:57 send from @__replicate_110-0_1784155538__ to data/vm-110-disk-0@__replicate_110-0_1784155975__ estimated size is 1.04Mtotal estimated size is 1.04MTIME        SENT   SNAPSHOT data/vm-110-disk-0@__replicate_110-0_1784155975__
+2026-07-15 22:52:57 delete previous replication snapshot '__replicate_110-0_1784155538__' on zfs-data:vm-110-disk-0
+2026-07-15 22:52:58 (remote_finalize_local_job) delete stale replication snapshot '__replicate_110-0_1784155538__' on zfs-data:vm-110-disk-0
+2026-07-15 22:52:58 end replication job
+2026-07-15 22:52:58 starting VM 110 on remote node 'hv02'
+2026-07-15 22:52:59 volume 'zfs-data:vm-110-disk-0' is 'zfs-data:vm-110-disk-0' on the target
+2026-07-15 22:52:59 start remote tunnel
+2026-07-15 22:53:00 ssh tunnel ver 1
+2026-07-15 22:53:00 starting storage migration
+2026-07-15 22:53:00 scsi0: start migration to nbd:unix:/run/qemu-server/110_nbd.migrate:exportname=drive-scsi0
+drive mirror re-using dirty bitmap 'repl_scsi0'
+drive mirror is starting for drive-scsi0
+mirror-scsi0: transferred 0.0 B of 1.6 MiB (0.00%) in 0s
+mirror-scsi0: transferred 1.6 MiB of 1.6 MiB (100.00%) in 1s, ready
+all 'mirror' jobs are ready
+2026-07-15 22:53:01 switching mirror jobs to actively synced mode
+mirror-scsi0: switching to actively synced mode
+mirror-scsi0: successfully switched to actively synced mode
+2026-07-15 22:53:02 starting online/live migration on unix:/run/qemu-server/110.migrate
+2026-07-15 22:53:02 set migration capabilities
+2026-07-15 22:53:02 migration downtime limit: 100 ms
+2026-07-15 22:53:02 migration cachesize: 128.0 MiB
+2026-07-15 22:53:02 set migration parameters
+2026-07-15 22:53:02 start migrate command to unix:/run/qemu-server/110.migrate
+2026-07-15 22:53:03 migration active, transferred 68.8 MiB of 1.0 GiB VM-state, 153.9 MiB/s
+2026-07-15 22:53:04 migration active, transferred 124.9 MiB of 1.0 GiB VM-state, 96.9 MiB/s
+2026-07-15 22:53:05 migration active, transferred 180.9 MiB of 1.0 GiB VM-state, 153.6 MiB/s
+2026-07-15 22:53:06 migration active, transferred 237.3 MiB of 1.0 GiB VM-state, 75.9 MiB/s
+2026-07-15 22:53:07 migration active, transferred 291.6 MiB of 1.0 GiB VM-state, 142.3 MiB/s
+2026-07-15 22:53:08 migration active, transferred 344.2 MiB of 1.0 GiB VM-state, 6.5 MiB/s
+2026-07-15 22:53:09 migration active, transferred 402.4 MiB of 1.0 GiB VM-state, 161.6 MiB/s
+2026-07-15 22:53:10 migration active, transferred 462.2 MiB of 1.0 GiB VM-state, 148.1 MiB/s
+2026-07-15 22:53:11 migration active, transferred 515.4 MiB of 1.0 GiB VM-state, 24.7 MiB/s
+2026-07-15 22:53:12 migration active, transferred 574.3 MiB of 1.0 GiB VM-state, 35.7 MiB/s
+2026-07-15 22:53:13 migration active, transferred 619.6 MiB of 1.0 GiB VM-state, 42.2 MiB/s
+2026-07-15 22:53:14 average migration speed: 86.7 MiB/s - downtime 47 ms
+2026-07-15 22:53:14 migration completed, transferred 665.3 MiB VM-state
+2026-07-15 22:53:14 migration status: completed
+all 'mirror' jobs are ready
+mirror-scsi0: Completing block job...
+mirror-scsi0: Completed successfully.
+mirror-scsi0: mirror-job finished
+2026-07-15 22:53:16 # /usr/bin/ssh -e none -o 'BatchMode=yes' -o 'HostKeyAlias=hv02' -o 'UserKnownHostsFile=/etc/pve/nodes/hv02/ssh_known_hosts' -o 'GlobalKnownHostsFile=none' root@10.90.0.12 pvesr set-state 110 \''{"local/hv01":{"last_iteration":1784155975,"last_try":1784155975,"fail_count":0,"last_sync":1784155975,"last_node":"hv01","duration":2.216426,"storeid_list":["zfs-data"]}}'\'
+2026-07-15 22:53:17 stopping NBD storage migration server on target.
+2026-07-15 22:53:19 migration finished successfully (duration 00:00:24)
+TASK OK

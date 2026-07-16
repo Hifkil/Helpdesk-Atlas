@@ -1,0 +1,120 @@
+==================================================
+DEMO 4 - VM SUPPRIMEE / RESTAURATION PBS / MIGRATION
+==================================================
+Etat verifie le 16/07 10:30 UTC (dry-run complet, cf. journal) :
+  - VM 999 "glpi01-demo" sur hv01, ARRETEE, net0 link_down=1 tag=20,
+    sans protection ni onboot -> destroy possible
+  - Dernier backup vm/220 : pbs01:backup/vm/220/2026-07-15T22:49:54Z
+  - zfs-data actif sur les 2 noeuds (257 / 176 GiB libres)
+  - ssh par NOM hv01<->hv02 repare (host keys enregistrees 16/07)
+Toutes les commandes se lancent sur hv01 (ssh atlas-hv01), sauf mention.
+Reflexe preuve : `date -u` avant/apres chaque etape.
+
+RAPPELS CRITIQUES
+  - JAMAIS de `qm start 999` tant que net0 n'a pas link_down=1
+    (la config restauree sort du backup SANS l'isolement !)
+  - `qm destroy` exige la VM arretee.
+  - A la console, le prompt affiche "glpi01" (hostname du backup),
+    pas "glpi01-demo" -> c'est normal, et c'est une preuve.
+  - systemd sera "degraded" (services qui attendent reseau/DB) :
+    l'argument = l'OS boote jusqu'au login, pas "GLPI fonctionne".
+
+--------------------------------------------------
+PREPARATION (avant la soutenance)  [FAIT le 16/07, rejouable]
+--------------------------------------------------
+date -u
+qm status 999                      # attendu: status: stopped
+qm config 999 | grep -E 'name|net0|onboot|protection'
+                                   # attendu: glpi01-demo + link_down=1
+# Test de boot hors reseau (optionnel si deja valide) :
+qm start 999 && sleep 20 && qm status 999
+# GUI Proxmox > VM 999 > Console : ecran de login "glpi01"
+qm shutdown 999 --timeout 60       # NE PAS OUBLIER avant la demo
+qm status 999                      # attendu: status: stopped
+
+--------------------------------------------------
+ETAPE 1 - La VM existe
+--------------------------------------------------
+date -u
+qm status 999
+qm config 999 | grep -E 'name|net0|scsi|virtio'
+
+--------------------------------------------------
+ETAPE 2 - Suppression (rituel: qm list avant tout destroy)
+--------------------------------------------------
+qm list | grep 999
+qm config 999 | head -3            # verifier: name: glpi01-demo
+qm destroy 999 --purge 1
+qm status 999
+# attendu: Configuration file '...999.conf' does not exist
+
+--------------------------------------------------
+ETAPE 3 - Derniere sauvegarde de glpi01 (220)
+--------------------------------------------------
+BACKUP="$(pvesm list pbs01 --content backup \
+  | awk '$1 ~ /backup\/vm\/220\// {print $1}' \
+  | sort | tail -n 1)"
+echo "$BACKUP"
+test -n "$BACKUP" && echo "Backup trouve : $BACKUP" || echo "ERREUR : aucun backup"
+# NE PAS CONTINUER si vide. (Pipeline teste verbatim le 16/07.)
+
+--------------------------------------------------
+ETAPE 4 - Restauration (ordre STRICT, pas de start avant le set)
+--------------------------------------------------
+date -u
+qmrestore "$BACKUP" 999 --storage zfs-data --unique 1     # ~18-30 s
+qm set 999 --name glpi01-demo
+qm set 999 --net0 virtio,bridge=vmbr1,tag=20,firewall=1,link_down=1
+qm set 999 --onboot 0
+qm config 999 | grep -E 'name|net0|scsi|virtio'
+date -u
+qm start 999
+# GUI Proxmox > VM 999 > Console : le systeme demarre (login glpi01)
+
+--------------------------------------------------
+ETAPE 5 - Migration a chaud vers hv02
+--------------------------------------------------
+# !! PAS de replique pvesr sur la 999 -> copie INTEGRALE du disque 15G
+# par le vRack : compter 2 a 5 min. Point de discours : "avec la
+# replication 15 min des VM de prod, la meme operation tombe a ~20 s
+# (mesure C2 du 15/07 : dns01 en 24 s, downtime 47 ms)".
+date -u
+qm status 999                      # attendu: running
+qm migrate 999 hv02 --online 1 --with-local-disks 1 --targetstorage zfs-data
+date -u
+ssh root@hv02 'qm status 999'      # attendu: status: running
+# GUI Proxmox : glpi01-demo apparait sous hv02.
+
+--------------------------------------------------
+RETOUR APRES LA DEMO
+--------------------------------------------------
+# 1. Rapatrier (la commande se lance SUR hv02) :
+ssh root@hv02 'qm migrate 999 hv01 --online 1 --with-local-disks 1 --targetstorage zfs-data'
+# 2. Verifier :
+qm status 999                      # attendu: running (sur hv01)
+# 3. Arreter :
+qm shutdown 999 --timeout 60 || qm stop 999
+qm status 999                      # attendu: stopped
+# 4. Apres la soutenance seulement - destruction (rituel qm list avant) :
+qm list | grep 999
+qm destroy 999 --purge 1
+# 5. Nettoyage PBS : si la 999 a existe a 21:00 UTC, le job nocturne
+#    (mode Exclude) l'a sauvegardee -> supprimer le groupe vm/999 dans
+#    la GUI PBS, ou le laisser purger par keep-daily=7.
+
+--------------------------------------------------
+PHRASES A DIRE
+--------------------------------------------------
+Suppression  : "Je simule ici la suppression accidentelle d'une machine virtuelle."
+Restauration : "La machine n'existant plus, sa restauration s'effectue depuis la
+                sauvegarde centralisee stockee sur Proxmox Backup Server."
+Reseau       : "La VM restauree reste volontairement isolee du reseau afin d'eviter
+                un conflit d'adresse IP avec la VM de production."
+Migration    : "Une fois restauree, la VM peut etre migree a chaud vers un autre
+                hyperviseur, avec deplacement de ses disques locaux, sans
+                interruption visible du systeme."
+
+--------------------------------------------------
+JOURNAL (a coller apres la demo, heures reelles)
+--------------------------------------------------
+| 2026-07-JJ hh:mm-hh:mm (UTC) | DEMO 4 jouee : destroy 999 -> qmrestore depuis $BACKUP (Xs) -> boot isole OK -> migration live hv01->hv02 (X min XX s) et retour | qm destroy/qmrestore/qm migrate --online --with-local-disks | restauration + migration sans erreur ; RTO restore mesure Xs | Task History Proxmox + captures console | Harry |

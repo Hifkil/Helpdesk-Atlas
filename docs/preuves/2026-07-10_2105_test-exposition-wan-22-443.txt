@@ -1,0 +1,22 @@
+PREUVE — Test d'exposition entrante WAN (TRAVAUX-02, test 5)
+Date : 2026-07-10 ~21:05 UTC · Opérateur : Harry · Depuis : PC personnel (hors infra)
+Cible : 51.75.38.225 (Additional IP OVH, WAN fw01)
+Attendu : ports 22 et 443 FILTRÉS (deny all implicite OPNsense sur WAN)
+
+--- Méthode 1 : bash /dev/tcp, port 22 ---
+$ timeout 3 bash -c 'cat < /dev/null > /dev/tcp/51.75.38.225/22' && echo OUVERT || echo "FERMÉ/FILTRÉ ✅"
+FERMÉ/FILTRÉ ✅
+
+--- Méthode 1 : bash /dev/tcp, port 443 ---
+$ timeout 3 bash -c 'cat < /dev/null > /dev/tcp/51.75.38.225/443' && echo OUVERT || echo "FERMÉ/FILTRÉ ✅"
+FERMÉ/FILTRÉ ✅
+
+--- Méthode 2 : curl, port 443 ---
+$ curl -m 3 -v https://51.75.38.225 2>&1 | tail -3
+* Connection timed out after 3002 milliseconds
+* closing connection #0
+curl: (28) Connection timed out after 3002 milliseconds
+
+CONCLUSION : timeout sur les deux ports (pas de RST = paquets silencieusement
+jetés par le pare-feu). Deny all implicite opérationnel — aucune exposition
+entrante sur l'IP publique. Test 5 de la recette TRAVAUX-02 : ✅

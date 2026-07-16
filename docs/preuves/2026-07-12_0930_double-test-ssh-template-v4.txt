@@ -1,0 +1,33 @@
+PREUVE — Durcissement SSH du template tpl-debian13 v4 : double test
+Date : 2026-07-12 (matin, UTC) · Opérateur : Harry
+Contexte : VM de fabrication 999 (10.90.0.99), avant re-consécration en template 9000.
+Le durcissement v3 n'avait jamais été réellement appliqué (découvert par grep) :
+
+--- État AVANT correction ---
+root@debian:~# grep -E '^PasswordAuthentication|^PermitRootLogin' /etc/ssh/sshd_config
+PermitRootLogin yes
+
+--- Application ---
+root@debian:~# sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/; s/^#\?PermitRootLogin.*/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config
+root@debian:~# grep -E '^PasswordAuthentication|^PermitRootLogin' /etc/ssh/sshd_config
+PermitRootLogin prohibit-password
+PasswordAuthentication no
+root@debian:~# sshd -t && systemctl restart ssh
+
+--- TEST 1 : connexion par clé (depuis le PC) — doit PASSER ---
+$ ssh root@10.90.0.99 'hostname'
+Enter passphrase for key '/home/hifkil/.ssh/id_ed25519':
+debian
+   ← ✅ authentification par clé fonctionnelle
+
+--- TEST 2 : connexion par mot de passe — doit ÊTRE REFUSÉE ---
+$ ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no root@10.90.0.99
+root@10.90.0.99: Permission denied (publickey).
+   ← ✅ refus net, sans même de prompt de mot de passe :
+     seule la méthode publickey est proposée par le serveur
+
+CONCLUSION : le template v4 est clés-only, vérifié dans les deux sens.
+Baked-in dans le socle : tous les futurs clones héritent du durcissement.
+Backlog associé : rejouer le sed sur dns01/glpi01/db01 (clones de l'ancien
+template v3 qui avait le trou), avant gel.
+Anti-récidive template : qm set 9000 --protection 1 + tags TEMPLATE.

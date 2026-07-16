@@ -1,0 +1,103 @@
+==================================================
+DEMO POSTFIX / CHAINE TICKET -> MAIL (mail01 + Mailpit)
+==================================================
+Contexte verifie le 16/07 (dry-run) :
+  - mail01 = VMID 230, 10.20.0.20 (DMZ vlan20) ; postfix actif, ecoute :25
+  - Mailpit ecoute sur 10.20.0.20:8025 (PAS sur 127.0.0.1 !)
+    API testee : http://10.20.0.20:8025/api/v1/messages -> total 46
+  - glpi01 (220, 10.20.0.11) : PAS de binaire sendmail (GLPI parle SMTP
+    directement) -> les envois de test se font en python3 smtplib (3.13.5)
+  - mynetworks = 127.0.0.0/8 + glpi01 + zbx01 (les autres sont refuses)
+  - rp01 (210, 10.20.0.10) : python3 3.13.5 present (contre-test relay)
+Acces : tout passe par hv01 (ssh atlas-hv01) + qm guest exec.
+Reflexe preuve : `date -u` AVANT et APRES chaque etape.
+
+--------------------------------------------------
+0. HORODATAGE DE DEBUT
+--------------------------------------------------
+date -u
+
+--------------------------------------------------
+1. ETAT DU SERVICE (a montrer)
+--------------------------------------------------
+qm guest exec 230 -- /bin/bash -c "systemctl is-active postfix && postconf mynetworks inet_interfaces && ss -lnt | grep -E ':25 |:8025 '"
+
+Attendu :
+  active
+  mynetworks = 127.0.0.0/8 ... (glpi01, zbx01)
+  LISTEN 10.20.0.20:25 (+ :25 loopback eventuel) et 10.20.0.20:8025
+
+--------------------------------------------------
+2. COMPTEUR MAILPIT AVANT
+--------------------------------------------------
+qm guest exec 230 -- /bin/bash -c "curl -s http://10.20.0.20:8025/api/v1/messages | python3 -c 'import json,sys; print(\"total mails:\", json.load(sys.stdin)[\"total\"])'"
+
+Noter la valeur (46 au dry-run du 16/07).
+
+--------------------------------------------------
+3. ENVOI D'UN MAIL DE TEST DEPUIS glpi01 (IP autorisee -> accepte)
+--------------------------------------------------
+qm guest exec 220 --timeout 30 -- /bin/bash -c "python3 - <<'EOF'
+import smtplib, datetime
+now = datetime.datetime.utcnow().strftime('%H:%M:%S')
+msg = f'Subject: [DEMO] test relay glpi01 {now}\nFrom: glpi@atlas.local\nTo: admin@atlas.local\n\nMail de demonstration soutenance.'
+s = smtplib.SMTP('10.20.0.20', 25, timeout=10)
+s.sendmail('glpi@atlas.local', ['admin@atlas.local'], msg)
+print('ENVOI_OK', now)
+EOF"
+
+Attendu : ENVOI_OK hh:mm:ss
+
+--------------------------------------------------
+4. PREUVE D'ARRIVEE COTE MAILPIT
+--------------------------------------------------
+qm guest exec 230 -- /bin/bash -c "sleep 2; curl -s http://10.20.0.20:8025/api/v1/messages | python3 -c 'import json,sys; d=json.load(sys.stdin); print(\"total:\", d[\"total\"]); [print(\"-\", m[\"Subject\"]) for m in d[\"messages\"][:3]]'"
+
+Attendu : total = avant + 1, sujet [DEMO] en tete de liste.
+Log serveur (optionnel, a l'ecran) :
+qm guest exec 230 -- /bin/bash -c "tail -5 /var/log/mail.log"
+
+--------------------------------------------------
+5. CONTRE-TEST : RELAY REFUSE DEPUIS UNE IP NON AUTORISEE
+--------------------------------------------------
+(rp01 est dans la meme DMZ -> joint le port 25 sans passer par fw01,
+ mais n'est PAS dans mynetworks -> Postfix doit refuser le relais
+ vers un domaine EXTERNE)
+
+qm guest exec 210 --timeout 30 -- /bin/bash -c "python3 - <<'EOF'
+import smtplib
+try:
+    s = smtplib.SMTP('10.20.0.20', 25, timeout=10)
+    s.sendmail('pirate@atlas.local', ['cible@example.com'], 'Subject: relay?\n\ntest')
+    print('ECHEC DU TEST : relay accepte !')
+except smtplib.SMTPRecipientsRefused as e:
+    print('OK - relais refuse :', e.recipients)
+except Exception as e:
+    print('OK - refuse/erreur :', type(e).__name__, e)
+EOF"
+
+Attendu : "OK - relais refuse ... 554 5.7.1 Relay access denied"
+
+--------------------------------------------------
+6. DEMO METIER : TICKET GLPI -> NOTIFICATION (GUI)
+--------------------------------------------------
+1. Navigateur (VPN) : https://helpdesk.atlas.local -> creer/suivre un ticket
+   (cf. Demo 1 du 15/07 : cycle complet ticket #4)
+2. Le timer glpi-cron (1 min) declenche l'envoi -> attendre ~1 min
+3. Rejouer la commande de l'etape 4 : le total augmente,
+   sujets "Nouveau suivi" / "Ticket resolu" visibles.
+
+--------------------------------------------------
+7. HORODATAGE DE FIN + JOURNAL
+--------------------------------------------------
+date -u
+
+Ligne a coller dans 11-journal-de-preuves.md :
+| 2026-07-JJ hh:mm (UTC) | DEMO mail rejouee : etat postfix + envoi smtplib glpi01->Mailpit (total N->N+1) + relais refuse depuis rp01 (554) + ticket GLPI->notification | qm guest exec 230/220/210 (postconf, smtplib, API Mailpit) | 4/4 conformes | sorties terminal + capture Mailpit | Harry |
+
+RAPPEL PIEGES (constates au dry-run 16/07) :
+  - PAS de sendmail sur glpi01 -> toujours smtplib (etape 3).
+  - Mailpit ecoute sur 10.20.0.20:8025, PAS 127.0.0.1 -> l'API se
+    requete sur l'IP DMZ meme depuis mail01.
+  - Ne pas lancer les guest exec en parallele sur la meme VM.
+  - Les serveurs sont en UTC ; l'UI Mailpit peut afficher l'heure locale.

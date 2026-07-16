@@ -1,0 +1,7 @@
+*.secret
+*secrets*
+*.pw
+coffre*
+ca/*.key
+ca/*.csr
+ca/*.srl

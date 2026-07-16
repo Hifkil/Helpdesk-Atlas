@@ -1,0 +1,52 @@
+PREUVE — Reboot de validation fw01 avec mesure de coupure (TRAVAUX-02, test 6)
+Date : 2026-07-10 21:11:15 UTC · Opérateur : Harry
+Méthode : qm reboot depuis hv01 + boucle ping depuis dns01 vers 9.9.9.9
+
+--- Lancement du reboot (hv01) ---
+root@hv01:~# date && qm reboot 100
+Fri Jul 10 21:11:15 UTC 2026
+
+--- Mesure de coupure (dns01, ping en cours pendant le reboot) ---
+root@dns01:~# ping -c 60 9.9.9.9
+PING 9.9.9.9 (9.9.9.9) 56(84) bytes of data.
+[seq 1-9 : perdus silencieusement — WAN déjà tombé]
+From 10.90.0.10 icmp_seq=10 Destination Host Unreachable
+From 10.90.0.10 icmp_seq=11 Destination Host Unreachable
+[... seq 12 à 42 : Destination Host Unreachable — sortie complète tronquée ici,
+     intégralité disponible dans l'historique de session ...]
+From 10.90.0.1 icmp_seq=43 Destination Host Unreachable
+From 10.90.0.1 icmp_seq=44 Destination Host Unreachable
+64 bytes from 9.9.9.9: icmp_seq=45 ttl=53 time=1.86 ms   ← PREMIER RETOUR
+64 bytes from 9.9.9.9: icmp_seq=46 ttl=53 time=1.62 ms
+64 bytes from 9.9.9.9: icmp_seq=47 ttl=53 time=1.49 ms
+64 bytes from 9.9.9.9: icmp_seq=48 ttl=53 time=1.80 ms
+--- 9.9.9.9 ping statistics ---
+48 packets transmitted, 4 received, +35 errors, 91.6667% packet loss, time 48026ms
+
+MESURE : premier paquet rendu à seq 45 → COUPURE ≈ 45 s entre la commande
+de reboot et le retour complet de la sortie Internet.
+
+--- Contre-recette post-reboot (dns01) ---
+root@dns01:~# ping -c3 9.9.9.9
+3 packets transmitted, 3 received, 0% packet loss
+rtt min/avg/max/mdev = 1.577/1.864/2.250/0.283 ms
+
+root@dns01:~# dig +short google.com @10.90.0.10
+142.251.98.113
+142.251.98.102
+142.251.98.100
+142.251.98.101
+142.251.98.139
+142.251.98.138
+
+root@dns01:~# curl -4 -s https://ifconfig.me/ip
+51.75.38.225
+
+--- Contre-recette depuis glpi01 ---
+root@glpi01:~# curl -4 -s https://ifconfig.me/ip
+51.75.38.225
+
+CONCLUSION : reboot fw01 = coupure ≈ 45 s, retour automatique complet
+(routage, DNS, NAT sortant). IP publique vue = 51.75.38.225 depuis les
+deux zones. Test 6 de la recette TRAVAUX-02 : ✅
+Cette mesure sert de référence RTO pour la perte/redémarrage du pare-feu (R4).

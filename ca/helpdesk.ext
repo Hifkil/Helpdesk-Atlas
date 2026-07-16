@@ -1,0 +1,2 @@
+subjectAltName = DNS:helpdesk.atlas.local, DNS:glpi01.atlas.local, IP:10.20.0.10
+extendedKeyUsage = serverAuth
